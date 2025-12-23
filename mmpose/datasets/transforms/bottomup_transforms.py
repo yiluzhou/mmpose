@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 import cv2
 import numpy as np
-import xtcocotools.mask as cocomask
+from mmpose.utils.cocoapi import mask as cocomask
 from mmcv.image import imflip_, imresize
 from mmcv.image.geometric import imrescale
 from mmcv.transforms import BaseTransform

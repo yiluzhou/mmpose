@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 
 from mmcv import track_iter_progress
 from PIL import Image
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 from mmpose.apis import inference_top_down_pose_model, init_pose_model
 

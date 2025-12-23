@@ -8,7 +8,7 @@ import warnings
 import cv2
 import numpy as np
 import xmltodict
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 np.random.seed(0)
 

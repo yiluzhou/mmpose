@@ -7,7 +7,7 @@ from typing import Callable, List, Optional, Sequence, Tuple, Union
 import numpy as np
 from mmengine.fileio import exists, get_local_path
 from mmengine.utils import is_abs
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 from mmpose.codecs.utils import camera_to_pixel
 from mmpose.datasets.datasets import BaseCocoStyleDataset

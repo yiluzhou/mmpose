@@ -1,4 +1,4 @@
-chumpy
+chumpy; python_version < "3.11"
 json_tricks
 matplotlib
 munkres
@@ -7,4 +7,5 @@ opencv-python
 pillow
 scipy
 torchvision
-xtcocotools>=1.12
+xtcocotools>=1.12; python_version < "3.13"
+pycocotools>=2.0.7; python_version >= "3.13"

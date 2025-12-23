@@ -30,9 +30,10 @@ version_file = '../../mmpose/version.py'
 
 
 def get_version():
+    version_globals = {}
     with open(version_file, 'r') as f:
-        exec(compile(f.read(), version_file, 'exec'))
-    return locals()['__version__']
+        exec(compile(f.read(), version_file, 'exec'), version_globals)
+    return version_globals['__version__']
 
 
 release = get_version()

@@ -5,7 +5,7 @@ from unittest import TestCase
 
 import numpy as np
 from mmengine.fileio import load
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 from mmpose.codecs.utils import camera_to_pixel
 from mmpose.datasets.datasets.utils import parse_pose_metainfo

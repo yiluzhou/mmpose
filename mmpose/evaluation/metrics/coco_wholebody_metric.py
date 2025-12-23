@@ -4,7 +4,7 @@ from typing import Dict, Optional, Sequence
 
 import numpy as np
 from mmengine.fileio import dump
-from xtcocotools.cocoeval import COCOeval
+from mmpose.utils.cocoapi import COCOeval
 
 from mmpose.registry import METRICS
 from .coco_metric import CocoMetric

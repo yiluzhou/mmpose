@@ -8,7 +8,7 @@ from unittest import TestCase
 import numpy as np
 from mmengine.fileio import dump, load
 from mmengine.logging import MessageHub
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 from mmpose.datasets.datasets import CocoDataset
 from mmpose.datasets.datasets.utils import parse_pose_metainfo

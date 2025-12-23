@@ -5,7 +5,7 @@ from typing import Callable, List, Optional, Sequence, Union
 import numpy as np
 from mmengine.fileio import exists, get_local_path, load
 from mmengine.utils import is_list_of
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 from mmpose.registry import DATASETS
 from mmpose.structures.bbox import bbox_xywh2xyxy

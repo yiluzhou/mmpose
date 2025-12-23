@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 import numpy as np
 from mmengine.fileio import get_local_path
-from xtcocotools.coco import COCO
+from mmpose.utils.cocoapi import COCO
 
 from mmpose.datasets.datasets import BaseMocapDataset
 from mmpose.registry import DATASETS
