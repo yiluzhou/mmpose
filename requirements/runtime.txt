@@ -1,13 +1,15 @@
 chumpy; python_version < "3.11"
+future
 json_tricks
 matplotlib
 munkres
 numpy
 # Custom cp313 Linux wheel to support numpy 2.4.0.
-opencv-python @ https://github.com/yiluzhou/opencv-python/releases/download/v4.13.0-np240/opencv_python-4.13.0+a7ca41e-cp313-cp313-linux_x86_64.whl ; python_version == "3.13" and platform_system == "Linux" and platform_machine == "x86_64"
-opencv-python; python_version < "3.13"
+opencv-python-headless @ https://github.com/yiluzhou/opencv-python/releases/download/v4.13.0-np240-headless/opencv_python_headless-4.13.0+961d7ee-cp313-cp313-linux_x86_64.whl ; python_version == "3.13" and platform_system == "Linux" and platform_machine == "x86_64"
+opencv-python-headless; python_version < "3.13"
 pillow
 scipy
+tensorboard
 torchvision
 xtcocotools>=1.12; python_version < "3.13"
 pycocotools>=2.0.7; python_version >= "3.13"
