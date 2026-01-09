@@ -150,6 +150,17 @@ If your algorithm has not been migrated, you can continue to use the [0.x branch
 
 Please refer to [installation.md](https://mmpose.readthedocs.io/en/latest/installation.html) for more detailed installation and dataset preparation.
 
+For Python 3.13 (CUDA 12.6) environments, use this install order:
+
+```bash
+pip install torch==2.9.1+cu126 torchvision==0.24.1+cu126 --index-url https://download.pytorch.org/whl/cu126
+pip install -U git+https://github.com/yiluzhou/mim.git
+mim install git+https://github.com/yiluzhou/mmengine.git
+pip install https://github.com/yiluzhou/mmcv/releases/download/v2.2.0+cu126-py313/mmcv-2.2.0-cp313-cp313-linux_x86_64.whl
+mim install git+https://github.com/yiluzhou/mmdetection.git
+pip install -U git+https://github.com/yiluzhou/mmpose.git
+```
+
 ## Getting Started
 
 We provided a series of tutorials about the basic usage of MMPose for new users:
