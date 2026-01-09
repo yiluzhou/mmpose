@@ -3,7 +3,9 @@ json_tricks
 matplotlib
 munkres
 numpy
-opencv-python
+# Custom cp313 Linux wheel to support numpy 2.4.0.
+opencv-python @ https://github.com/yiluzhou/opencv-python/releases/download/v4.13.0-np240/opencv_python-4.13.0+a7ca41e-cp313-cp313-linux_x86_64.whl?download=1; python_version == "3.13" and platform_system == "Linux" and platform_machine == "x86_64"
+opencv-python; python_version < "3.13"
 pillow
 scipy
 torchvision
