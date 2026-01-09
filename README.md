@@ -150,6 +150,8 @@ If your algorithm has not been migrated, you can continue to use the [0.x branch
 
 Please refer to [installation.md](https://mmpose.readthedocs.io/en/latest/installation.html) for more detailed installation and dataset preparation.
 
+For CUDA 13.0-based installs, make sure the NVIDIA driver is 580+ (CUDA 13.0 support).
+
 For Python 3.13 (CUDA 12.6) environments, use this install order:
 
 ```bash
@@ -157,6 +159,17 @@ pip install torch==2.9.1+cu126 torchvision==0.24.1+cu126 --index-url https://dow
 pip install -U git+https://github.com/yiluzhou/mim.git
 mim install git+https://github.com/yiluzhou/mmengine.git
 pip install https://github.com/yiluzhou/mmcv/releases/download/v2.2.0+cu126-py313/mmcv-2.2.0-cp313-cp313-linux_x86_64.whl
+mim install git+https://github.com/yiluzhou/mmdetection.git
+pip install -U git+https://github.com/yiluzhou/mmpose.git
+```
+
+For Python 3.13 (CUDA 13.0) environments, use this install order:
+
+```bash
+pip3 install torch==2.9.1+cu130 torchvision==0.24.1+cu130 --index-url https://download.pytorch.org/whl/cu130
+pip install -U git+https://github.com/yiluzhou/mim.git
+mim install git+https://github.com/yiluzhou/mmengine.git
+pip install https://github.com/yiluzhou/mmcv/releases/download/v2.2.0+cu130-py313-np240/mmcv-2.2.0-cp313-cp313-linux_x86_64.whl
 mim install git+https://github.com/yiluzhou/mmdetection.git
 pip install -U git+https://github.com/yiluzhou/mmpose.git
 ```

@@ -91,6 +91,10 @@ pip install -v -e .
 # "-v" means verbose, or more output
 # "-e" means installing a project in editable mode,
 # thus any local modifications made to the code will take effect without reinstallation.
+
+Note: if you already installed PyTorch/torchvision with a specific CUDA build,
+you can use `pip install -v -e . --no-deps` after `requirements.txt` to avoid
+pip re-resolving CUDA runtime packages (for example `nvidia-cuda-runtime`).
 ```
 
 ### Install as a Python package

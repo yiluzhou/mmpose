@@ -92,6 +92,10 @@ pip install -v -e .
 # "-e" 表示以可编辑形式安装，这样可以在不重新安装的情况下，让本地修改直接生效
 ```
 
+注意：如果你已安装带特定 CUDA 版本的 PyTorch/torchvision，
+可在安装 `requirements.txt` 后使用 `pip install -v -e . --no-deps`，
+避免 pip 重新解析 CUDA 运行时包（例如 `nvidia-cuda-runtime`）。
+
 ### 作为 Python 包安装
 
 如果只是希望调用 MMPose 的接口，或者在自己的项目中导入 MMPose 中的模块。直接使用 mim 安装即可。
