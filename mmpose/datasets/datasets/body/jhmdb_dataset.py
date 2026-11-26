@@ -117,7 +117,7 @@ class JhmdbDataset(BaseCocoStyleDataset):
         keypoints = _keypoints[..., :2] - 1
         keypoints_visible = np.minimum(1, _keypoints[..., 2])
 
-        num_keypoints = np.count_nonzero(keypoints.max(axis=2))
+        num_keypoints = int(np.count_nonzero(keypoints.max(axis=2)))
         area = np.clip((x2 - x1) * (y2 - y1) * 0.53, a_min=1.0, a_max=None)
         category_id = ann.get('category_id', [1] * len(keypoints))
 

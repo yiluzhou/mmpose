@@ -729,12 +729,14 @@ class Albumentation(BaseTransform):
             if albumentations is None:
                 raise RuntimeError('albumentations is not installed')
             rank, _ = get_dist_info()
-            if rank == 0 and not hasattr(
-                    albumentations.augmentations.transforms, obj_type):
+            # ``albumentations.augmentations.transforms`` no longer exists
+            # in 2.x; image-only transforms are the pixel-level ones.
+            obj_cls = getattr(albumentations, obj_type)
+            if rank == 0 and not issubclass(obj_cls,
+                                            albumentations.ImageOnlyTransform):
                 warnings.warn(
                     f'{obj_type} is not pixel-level transformations. '
                     'Please use with caution.')
-            obj_cls = getattr(albumentations, obj_type)
         elif isinstance(obj_type, type):
             obj_cls = obj_type
         else:

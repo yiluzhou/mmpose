@@ -123,7 +123,7 @@ class HumanArt21Dataset(HumanArtDataset):
         if 'num_keypoints' in ann:
             num_keypoints = ann['num_keypoints']
         else:
-            num_keypoints = np.count_nonzero(keypoints.max(axis=2))
+            num_keypoints = int(np.count_nonzero(keypoints.max(axis=2)))
 
         data_info = {
             'img_id': ann['image_id'],

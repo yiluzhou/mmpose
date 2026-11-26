@@ -298,7 +298,7 @@ class BaseCocoStyleDataset(BaseDataset):
         if 'num_keypoints' in ann:
             num_keypoints = ann['num_keypoints']
         else:
-            num_keypoints = np.count_nonzero(keypoints.max(axis=2))
+            num_keypoints = int(np.count_nonzero(keypoints.max(axis=2)))
 
         if 'area' in ann:
             area = np.array(ann['area'], dtype=np.float32)

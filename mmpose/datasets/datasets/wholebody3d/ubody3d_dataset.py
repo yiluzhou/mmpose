@@ -207,7 +207,7 @@ class UBody3dDataset(BaseMocapDataset):
                 if 'center' in ann:
                     centers[j] = np.array(ann['center'])
                 bboxes[j] = np.array(ann['bbox'], dtype=np.float32)
-                bbox_scores[j] = np.array([1], dtype=np.float32)
+                bbox_scores[j] = 1.0
                 bbox_scales[j] = np.array([1, 1], dtype=np.float32)
 
             imgs = self.ann_data.loadImgs(img_ids)

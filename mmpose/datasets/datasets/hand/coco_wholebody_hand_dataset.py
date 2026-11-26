@@ -128,7 +128,7 @@ class CocoWholeBodyHandDataset(BaseCocoStyleDataset):
                         keypoints = _keypoints[..., :2]
                         keypoints_visible = np.minimum(1, _keypoints[..., 2])
 
-                        num_keypoints = np.count_nonzero(keypoints.max(axis=2))
+                        num_keypoints = int(np.count_nonzero(keypoints.max(axis=2)))
 
                         instance_info = {
                             'img_id': ann['image_id'],
