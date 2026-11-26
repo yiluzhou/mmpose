@@ -132,7 +132,9 @@ def add_mim_extension():
     """
 
     # parse installment mode
-    if 'develop' in sys.argv:
+    # `editable_wheel` is what PEP 660 editable installs (pip>=21.3 with
+    # setuptools>=64) run instead of `develop`.
+    if 'develop' in sys.argv or 'editable_wheel' in sys.argv:
         # installed by `pip install -e .`
         if platform.system() == 'Windows':
             mode = 'copy'
