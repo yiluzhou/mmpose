@@ -12,6 +12,7 @@ from mmcv.transforms import BaseTransform
 from mmcv.transforms.utils import avoid_cache_randomness, cache_randomness
 from mmengine import is_list_of
 from mmengine.dist import get_dist_info
+from mmengine.utils import digit_version
 from scipy.stats import truncnorm
 
 from mmpose.codecs import *  # noqa: F401, F403
@@ -566,6 +567,83 @@ class RandomBBoxTransform(BaseTransform):
         return repr_str
 
 
+def _legacy_range(args: dict, lo_key: str, hi_key: str, default_hi):
+    """Pop an albumentations 1.x ``min_*``/``max_*`` pair as a range.
+
+    In 1.x a missing ``min_*`` meant "equal to ``max_*``".
+    """
+    hi = args.pop(hi_key, default_hi)
+    lo = args.pop(lo_key, None)
+    return (hi if lo is None else lo, hi)
+
+
+def adapt_albumentations_args(obj_type: str, args: dict) -> dict:
+    """Translate albumentations 1.x arguments to their 2.x equivalents.
+
+    MMPose configs were written for albumentations 1.x. Version 2.x renamed
+    several arguments and changed some defaults. Unknown arguments are only
+    warned about by 2.x and then ignored, which silently changes the
+    augmentation, e.g. ``CoarseDropout(max_holes=1, max_height=0.4, ...)``
+    falls back to 1-2 holes of 10-20% size. This function restores the 1.x
+    behaviour. It is a no-op for albumentations < 2.0.
+
+    Args:
+        obj_type (str): Name of the albumentations transform.
+        args (dict): Keyword arguments from the config. Not modified.
+
+    Returns:
+        dict: Keyword arguments valid for the installed albumentations.
+    """
+    if albumentations is None or digit_version(
+            albumentations.__version__) < digit_version('2.0.0'):
+        return args
+    args = dict(args)
+    if obj_type == 'CoarseDropout' and not args.keys().isdisjoint(
+            ('max_holes', 'min_holes', 'max_height', 'min_height',
+             'max_width', 'min_width', 'fill_value', 'mask_fill_value')):
+        # 1.x defaults: max_holes=8, max_height=8, max_width=8 (pixels)
+        args['num_holes_range'] = _legacy_range(args, 'min_holes',
+                                                'max_holes', 8)
+        args['hole_height_range'] = _legacy_range(args, 'min_height',
+                                                  'max_height', 8)
+        args['hole_width_range'] = _legacy_range(args, 'min_width',
+                                                 'max_width', 8)
+        if 'fill_value' in args:
+            args['fill'] = args.pop('fill_value')
+        if 'mask_fill_value' in args:
+            args['fill_mask'] = args.pop('mask_fill_value')
+    elif obj_type == 'GridDropout':
+        if 'unit_size_min' in args or 'unit_size_max' in args:
+            args['unit_size_range'] = (args.pop('unit_size_min'),
+                                       args.pop('unit_size_max'))
+        if 'holes_number_x' in args or 'holes_number_y' in args:
+            args['holes_number_xy'] = (args.pop('holes_number_x'),
+                                       args.pop('holes_number_y'))
+        if 'shift_x' in args or 'shift_y' in args:
+            args['shift_xy'] = (args.pop('shift_x', 0), args.pop('shift_y', 0))
+        if 'fill_value' in args:
+            args['fill'] = args.pop('fill_value')
+        if 'mask_fill_value' in args:
+            args['fill_mask'] = args.pop('mask_fill_value')
+    elif obj_type == 'GaussianBlur':
+        # 1.x defaults: blur_limit=(3, 7), sigma_limit=0 (sigma derived from
+        # the kernel size). 2.x defaults: blur_limit=0, sigma_limit=(0.5, 3)
+        args.setdefault('blur_limit', (3, 7))
+        args.setdefault('sigma_limit', 0)
+    elif obj_type == 'GaussNoise' and 'std_range' not in args:
+        # 1.x: variance in [10, 50] on the 0-255 scale. 2.x: standard
+        # deviation as a fraction of the maximum value, default (0.2, 0.44).
+        var_limit = args.pop('var_limit', (10.0, 50.0))
+        if isinstance(var_limit, (int, float)):
+            var_limit = (0.0, var_limit)
+        var_lo, var_hi = var_limit
+        args['std_range'] = (var_lo**0.5 / 255.0, var_hi**0.5 / 255.0)
+        if 'mean' in args:
+            mean = args.pop('mean') / 255.0
+            args['mean_range'] = (mean, mean)
+    return args
+
+
 @TRANSFORMS.register_module()
 @avoid_cache_randomness
 class Albumentation(BaseTransform):
@@ -667,6 +745,9 @@ class Albumentation(BaseTransform):
                 self.albu_builder(transform)
                 for transform in args['transforms']
             ]
+
+        if mmengine.is_str(obj_type):
+            args = adapt_albumentations_args(obj_type, args)
 
         return obj_cls(**args)
 

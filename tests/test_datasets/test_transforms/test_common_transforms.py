@@ -417,6 +417,49 @@ class TestAlbumentation(TestCase):
         results_update = transform(copy.deepcopy(self.results))
         self.assertEqual(results_update['img'].dtype, np.float32)
 
+    def test_legacy_args(self):
+        # Configs use albumentations 1.x arguments. On 2.x they must be
+        # translated, not silently dropped.
+        import albumentations
+        from mmengine.utils import digit_version
+        transform = Albumentation(transforms=[
+            dict(
+                type='CoarseDropout',
+                max_holes=1,
+                max_height=0.4,
+                max_width=0.4,
+                min_holes=1,
+                min_height=0.2,
+                min_width=0.2,
+                p=1.),
+            dict(
+                type='GridDropout',
+                unit_size_min=10,
+                unit_size_max=40,
+                random_offset=True,
+                p=0.5),
+            dict(type='GaussianBlur', p=0.5),
+            dict(type='GaussNoise', p=0.1),
+        ])
+        dropout, grid, blur, noise = transform.aug.transforms
+        if digit_version(albumentations.__version__) >= digit_version('2.0.0'):
+            self.assertEqual(tuple(dropout.num_holes_range), (1, 1))
+            self.assertEqual(tuple(dropout.hole_height_range), (0.2, 0.4))
+            self.assertEqual(tuple(dropout.hole_width_range), (0.2, 0.4))
+            self.assertEqual(tuple(grid.unit_size_range), (10, 40))
+            self.assertEqual(tuple(blur.blur_limit), (3, 7))
+            self.assertEqual(tuple(blur.sigma_limit), (0, 0))
+            np.testing.assert_allclose(noise.std_range,
+                                       (10**0.5 / 255, 50**0.5 / 255))
+        else:
+            self.assertEqual(dropout.max_holes, 1)
+            self.assertEqual(dropout.max_height, 0.4)
+            self.assertEqual(dropout.min_height, 0.2)
+            self.assertEqual(grid.unit_size_min, 10)
+            self.assertEqual(grid.unit_size_max, 40)
+        results = transform(copy.deepcopy(self.results))
+        self.assertEqual(results['img'].shape, self.results['img'].shape)
+
     def test_repr(self):
         # test when ``keymap`` is not None
         transforms = [
