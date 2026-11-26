@@ -2,7 +2,6 @@
 from functools import partial
 
 import torch
-from six.moves import map, zip
 
 
 def multi_apply(func, *args, **kwargs):

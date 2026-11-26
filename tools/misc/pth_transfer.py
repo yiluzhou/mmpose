@@ -6,7 +6,7 @@ import torch
 
 
 def change_model(args):
-    dis_model = torch.load(args.dis_path, map_location='cpu')
+    dis_model = torch.load(args.dis_path, map_location='cpu', weights_only=False)
     all_name = []
     if args.two_dis:
         for name, v in dis_model['state_dict'].items():

@@ -12,7 +12,7 @@ from scipy import interpolate
 
 
 def load_pretrained(config, model, logger):
-    checkpoint = torch.load(config, map_location='cpu')
+    checkpoint = torch.load(config, map_location='cpu', weights_only=False)
     ckpt_model = checkpoint['model']
     if any([True if 'encoder.' in k else False for k in ckpt_model.keys()]):
         ckpt_model = {

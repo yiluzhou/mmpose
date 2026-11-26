@@ -291,8 +291,9 @@ class Pose3dLocalVisualizer(PoseLocalVisualizer):
         fig.tight_layout()
         fig.canvas.draw()
 
-        pred_img_data = np.frombuffer(
-            fig.canvas.tostring_rgb(), dtype=np.uint8)
+        # ``tostring_rgb`` was removed in Matplotlib 3.10.
+        pred_img_data = np.ascontiguousarray(
+            np.asarray(fig.canvas.buffer_rgba())[..., :3]).reshape(-1)
 
         if not pred_img_data.any():
             pred_img_data = np.full((vis_height, vis_width, 3), 255)
@@ -380,7 +381,7 @@ class Pose3dLocalVisualizer(PoseLocalVisualizer):
 
             for kpts, score, visible in zip(keypoints, scores,
                                             keypoints_visible):
-                kpts = np.array(kpts[..., :2], copy=False)
+                kpts = np.asarray(kpts[..., :2])
 
                 if kpt_color is None or isinstance(kpt_color, str):
                     kpt_color = [kpt_color] * len(kpts)
